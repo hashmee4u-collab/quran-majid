@@ -1,0 +1,12 @@
+{
+  "background_color": "#ffffff",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "Iqra92 quran &amp; prayer times",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "Iqra92",
+  "start_url": "/",
+  "theme_color": "#ffffff",
+  "lang": "ur"
+}
