@@ -8,9 +8,8 @@
   "short_name": "Iqra92",
   "start_url": "/",
   "theme_color": "#ffffff",
-  "lang": "ur"
-  ,
-"icons": [
+  "lang": "ur",
+  "icons": [
   {
     "src": "icon-512.png",
     "sizes": "512x512",
