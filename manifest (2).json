@@ -1,0 +1,14 @@
+{
+  "background_color": "#ffffff",
+  "dir": "rtl",
+  "display": "standalone",
+  "name": "Iqra92 Quran &amp; Prayer Times",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "Iqra92",
+  "start_url": "/",
+  "theme_color": "#ffffff",
+  "lang": "ur",
+  "id": "Iqra92 quran &amp; prayer times",
+  "description": "Quran,  Prayer Times &amp; Islamic Calender"
+}
