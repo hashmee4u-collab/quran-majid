@@ -4,9 +4,9 @@
   "display": "standalone",
   "name": "Iqra92 quran &amp; prayer times",
   "orientation": "any",
-  "scope": "/",
+  "scope": "/quran-majid/",
   "short_name": "Iqra92",
-  "start_url": "/",
+  "start_url": "/quran-majid/",
   "theme_color": "#ffffff",
   "lang": "ur",
   "icons": [
