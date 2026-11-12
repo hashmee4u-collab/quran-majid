@@ -1,0 +1,11 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "nl.super92.quranmajid",
+      "sha256_cert_fingerprints":
+        ["96:F0:B2:A1:2C:41:7A:ED:DE:0E:F9:29:97:21:77:DD:52:2D:70:5D:94:16:11:6E:A9:A3:BC:E8:06:43:2C:82"]
+    }
+  }
+]
