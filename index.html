@@ -60,6 +60,66 @@ const names = {
 function showSurahs(){reader.classList.add("hidden");root.classList.remove("hidden");window.scrollTo(0,0)}window.showSurahs=showSurahs;function bookmark(s,a){localStorage.setItem("bookmark",JSON.stringify({s,a}));alert("آیت بک مارک ہوگئی۔")}function copyAyah(s,a){const x=quran.surahs.find(z=>z.number===s).ayahs.find(z=>z.ayah===a);navigator.clipboard?.writeText(x.text);alert("آیت نقل ہوگئی۔")}function toggleDark(){document.body.classList.toggle("dark");localStorage.setItem("dark",document.body.classList.contains("dark"))}function fontSize(d){let v=parseInt(getComputedStyle(document.documentElement).getPropertyValue("--size"))||29;v=Math.max(22,Math.min(40,v+d));document.documentElement.style.setProperty("--size",v+"px");localStorage.setItem("size",v)}if(localStorage.getItem("dark")==="true")document.body.classList.add("dark");if(localStorage.getItem("size"))document.documentElement.style.setProperty("--size",localStorage.getItem("size")+"px");document.getElementById("search").addEventListener("input",e=>{const q=e.target.value.trim();render(q?quran.surahs.filter(s=>(names[s.number]||"").includes(q)||String(s.number)===q):quran.surahs)});window.openSurah=openSurah;window.showSurahs=showSurahs;render();</script>
 <style>
 .quick{display:flex;gap:8px;overflow:auto;margin-top:9px}.quick .btn{white-space:nowrap}.audioBar{position:sticky;bottom:8px;z-index:4;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px;margin-top:10px}.audioBar audio{width:100%}.result{cursor:pointer}.bookmarkItem{display:flex;justify-content:space-between;align-items:center;gap:8px}.empty{padding:20px;text-align:center;color:var(--muted)}
+
+/* Mobile full-width and centered layout */
+html, body {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+main {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 12px;
+}
+
+#reader, #surahs, #newFeatures {
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ayah {
+  width: 100%;
+  text-align: center;
+}
+
+.arabic {
+  width: 100%;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.audioBar, #qAudio {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
+@media (max-width: 600px) {
+  main {
+    padding: 8px;
+  }
+  .card, .ayah {
+    padding: 12px;
+  }
+  .toolbar {
+    flex-wrap: wrap;
+  }
+  .toolbar input {
+    min-width: 100%;
+  }
+}
+
 </style>
 <script>
 (function(){
