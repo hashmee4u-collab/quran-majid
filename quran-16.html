@@ -1,1 +1,98 @@
 
+
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>16 لائن قرآن پاک</title>
+<style>
+body {
+  margin: 0;
+  padding: 16px;
+  background: #f5f0df;
+  color: #263b2b;
+  font-family: serif;
+}
+header {
+  text-align: center;
+  background: #174b35;
+  color: #f5d77a;
+  padding: 18px;
+  border-radius: 12px;
+}
+h1 { margin: 0; font-size: 25px; }
+.subtitle { margin-top: 8px; color: white; }
+.page {
+  max-width: 650px;
+  margin: 18px auto;
+  padding: 18px;
+  background: #fffdf5;
+  border: 3px double #b38a35;
+  border-radius: 12px;
+}
+.line {
+  height: 32px;
+  border-bottom: 1px solid #e8dfc8;
+}
+.notice {
+  text-align: center;
+  line-height: 1.8;
+  padding: 18px 8px;
+}
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 18px auto;
+}
+button {
+  background: #174b35;
+  color: white;
+  border: 0;
+  padding: 12px 22px;
+  border-radius: 8px;
+  font-size: 16px;
+}
+button:disabled { opacity: .5; }
+footer {
+  text-align: center;
+  color: #725d32;
+  margin: 20px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📖 16 لائن قرآن پاک</h1>
+  <div class="subtitle">قرآن مجید — عربی متن</div>
+</header>
+
+<div class="page">
+  <div class="notice">
+    <strong>بسم اللہ الرحمن الرحیم</strong>
+    <p>مستند 16 لائن قرآن کے صفحات تیار کیے جا رہے ہیں۔</p>
+    <p>قرآنی متن اور صفحہ بندی کی تصدیق کے بعد شامل کی جائے گی۔</p>
+  </div>
+  <div id="lines"></div>
+</div>
+
+<div class="controls">
+  <button disabled>پچھلا صفحہ</button>
+  <button disabled>اگلا صفحہ</button>
+</div>
+
+<footer>قرآن مجید کی خدمت — قرآن مجید ایپ</footer>
+
+<script>
+const lines = document.getElementById("lines");
+for (let i = 0; i < 16; i++) {
+  const line = document.createElement("div");
+  line.className = "line";
+  lines.appendChild(line);
+}
+</script>
+
+</body>
+</html>
