@@ -162,8 +162,13 @@ main {
     box.dataset.tools=String(n);
     const s=quran.surahs.find(x=>x.number===n); let cumulative=0;
     for(const z of quran.surahs){if(z.number===n)break;cumulative+=z.ayahs.length}
-    box.querySelectorAll('.ayah').forEach((el,i)=>{
-      const a=s.ayahs[i]; if(!a)return; const globalNo=cumulative+a.ayah;
+   box.querySelectorAll('.ayah:not([id$="-basmala"])').forEach((el,i)=>{
+      const match=el.id.match(/^a-(\d+)-(\d+)$/);
+if(!match)return;
+const displayedAyah=Number(match[2]);
+const sourceAyah=n===1?displayedAyah+1:displayedAyah;
+const globalNo=cumulative+sourceAyah;
+    const a=s.ayahs[sourceAyah-1];
      el.dataset.audioNumber=globalNo;
       const actions=el.querySelector('.actions'); if(!actions)return;
       const play=document.createElement('button'); play.className='btn primary'; play.textContent='▶ تلاوت';
