@@ -164,18 +164,48 @@ main {
     for(const z of quran.surahs){if(z.number===n)break;cumulative+=z.ayahs.length}
     box.querySelectorAll('.ayah').forEach((el,i)=>{
       const a=s.ayahs[i]; if(!a)return; const globalNo=cumulative+a.ayah;
+     el.dataset.audioNumber=globalNo;
       const actions=el.querySelector('.actions'); if(!actions)return;
       const play=document.createElement('button'); play.className='btn primary'; play.textContent='▶ تلاوت';
       play.onclick=()=>playAyah(el,globalNo); actions.prepend(play);
       const tr=el.querySelector('.translation'); if(tr && !el.querySelector('.readBtn')){const b=document.createElement('button');b.className='btn readBtn';b.textContent='✓ یہاں تک پڑھا';b.onclick=()=>{localStorage.setItem('lastRead',JSON.stringify({s:n,a:a.ayah}));alert('آخری مقام محفوظ ہوگیا۔')};actions.appendChild(b)}
     });
+  
+window.playAyah=function(el,num){
+  let player=document.getElementById('qAudio');
+  if(!player){
+    player=document.createElement('audio');
+    player.id='qAudio';
+    player.controls=true;
+    player.className='audioBar';
+    document.getElementById('ayahs').prepend(player);
   }
-  window.playAyah=function(el,num){
-    let player=document.getElementById('qAudio');
-    if(!player){player=document.createElement('audio');player.id='qAudio';player.controls=true;player.className='audioBar';document.getElementById('ayahs').prepend(player)}
-    player.src='https://cdn.islamic.network/quran/audio/128/ar.alafasy/'+num+'.mp3'; player.play().catch(()=>alert('تلاوت چلانے کے لیے دوبارہ Play دبائیں۔'));
-    document.querySelectorAll('.ayah').forEach(x=>x.style.outline=''); el.style.outline='2px solid var(--gold)';
+
+  const rows=[...document.querySelectorAll('.ayah[data-audio-number]')];
+
+  function highlight(row){
+    document.querySelectorAll('.ayah').forEach(x=>x.style.outline='');
+    row.style.outline='2px solid var(--gold)';
+    row.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+
+  highlight(el);
+  player.onended=function(){
+    const index=rows.indexOf(el);
+    const next=rows[index+1];
+    if(next){
+      localStorage.setItem('lastRead',JSON.stringify({
+        s:Number(next.id.split('-')[1]),
+        a:Number(next.id.split('-')[2])
+      }));
+      window.playAyah(next,Number(next.dataset.audioNumber));
+    }
   };
+
+  player.src='https://cdn.islamic.network/quran/audio/128/ar.alafasy/'+num+'.mp3';
+  player.play().catch(()=>alert('تلاوت چلانے کے لیے دوبارہ Play دبائیں۔'));
+};
+
 })();
 </script>
 
