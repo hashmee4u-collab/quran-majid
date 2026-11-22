@@ -61,6 +61,7 @@ const names = {
  const showBasmala=(Number(n)!==9);
  // Bismillah is separate and unnumbered. In Al-Fatiha, the following six ayahs are numbered 1–6.
  const basmalaHtml=showBasmala?`<div class="ayah" id="a-${n}-basmala"><div class="arabic" style="text-align:center;padding:8px;font-size:1.5em">${basmala}</div></div>`:"";
+ const displayedAyahs=isFatiha?s.ayahs.filter(a=>a.ayah!==1).map(a=>({...a,sourceAyah:a.ayah,ayah:a.ayah-1})):s.ayahs;
  const audioOffset=quran.surahs.filter(x=>x.number<Number(n)).reduce((sum,x)=>sum+x.ayahs.length,0);
  box.innerHTML=basmalaHtml+displayedAyahs.map(a=>{
    const t=a.text||"";
