@@ -61,11 +61,12 @@ const names = {
  const showBasmala=(Number(n)!==9);
  // Bismillah is separate and unnumbered. In Al-Fatiha, the following six ayahs are numbered 1–6.
  const basmalaHtml=showBasmala?`<div class="ayah" id="a-${n}-basmala"><div class="arabic" style="text-align:center;padding:8px;font-size:1.5em">${basmala}</div></div>`:"";
- const displayedAyahs=isFatiha?s.ayahs.filter(a=>a.ayah!==1).map(a=>({...a,sourceAyah:a.ayah,ayah:a.ayah-1})):s.ayahs;
+ const audioOffset=quran.surahs.filter(x=>x.number<Number(n)).reduce((sum,x)=>sum+x.ayahs.length,0);
  box.innerHTML=basmalaHtml+displayedAyahs.map(a=>{
    const t=a.text||"";
    const sourceAyah=a.sourceAyah||a.ayah;
-   return `<div class="ayah" id="a-${n}-${a.ayah}"><div class="arabic"><span class="num">${a.ayah}</span>${t}</div><div class="actions"><button class="btn primary" onclick="bookmark(${n},${sourceAyah})">🔖 بک مارک</button><button class="btn" onclick="copyAyah(${n},${sourceAyah})">📋 نقل کریں</button></div></div>`;
+   const audioNumber=audioOffset+sourceAyah;
+   return `<div class="ayah" id="a-${n}-${a.ayah}" data-audio-number="${audioNumber}"><div class="arabic"><span class="num">${a.ayah}</span>${t}</div><div class="actions"><button class="btn primary playAyahBtn" onclick="window.playAyah(this.closest('.ayah'),${audioNumber})">▶ تلاوت</button><button class="btn primary" onclick="bookmark(${n},${sourceAyah})">🔖 بک مارک</button><button class="btn" onclick="copyAyah(${n},${sourceAyah})">📋 نقل کریں</button></div></div>`;
  }).join("");
  localStorage.setItem("lastSurah",n); reader.scrollIntoView({behavior:"auto",block:"start"});
 }
