@@ -164,7 +164,7 @@ main {
     const hits=[]; quran.surahs.forEach(s=>s.ayahs.forEach(a=>{if(a.text.includes(t))hits.push({s,a})}));
     surahRoot.innerHTML=hits.length?'<h2>🔎 نتائج</h2>'+hits.slice(0,80).map(x=>`<div class="card result" onclick="openMark(${x.s.number},${x.a.ayah})"><div class="name">${x.s.number}. ${names[x.s.number]||'سورت'} — آیت ${x.a.ayah}</div><div class="arabic" style="font-size:23px">${x.a.text}</div></div>`).join(''):'<div class="card empty">کوئی آیت نہیں ملی۔</div>';
   };
-  q.addEventListener('input',e=>searchAll(e.target.value));
+  if(q) q.addEventListener('input',e=>searchAll(e.target.value));
   document.getElementById('lastBtn').onclick=function(){const x=JSON.parse(localStorage.getItem('lastRead')||'null');if(x)openMark(x.s,x.a);else alert('ابھی آخری پڑھی ہوئی آیت محفوظ نہیں ہے۔')};
   document.getElementById('marksBtn').onclick=renderMarks;
   document.getElementById('allBtn').onclick=function(){q.value='';originalRender(quran.surahs);reader.classList.add('hidden');surahRoot.classList.remove('hidden')};
