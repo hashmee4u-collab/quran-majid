@@ -170,7 +170,7 @@ main {
   window.openSurah=async function(n){await oldOpen(n); addReaderTools(n);};
   function addReaderTools(n){
     const box=document.getElementById('ayahs');
-    if(!box || box.dataset.tools===String(n)) return;
+    if(!box) return;
     box.dataset.tools=String(n);
     const s=quran.surahs.find(x=>x.number===n); let cumulative=0;
     for(const z of quran.surahs){if(z.number===n)break;cumulative+=z.ayahs.length}
@@ -183,8 +183,13 @@ const globalNo=cumulative+sourceAyah;
     const a=s.ayahs[sourceAyah-1];
      el.dataset.audioNumber=globalNo;
       const actions=el.querySelector('.actions'); if(!actions)return;
-      const play=document.createElement('button'); play.className='btn primary'; play.textContent='▶ تلاوت';
-      play.onclick=()=>playAyah(el,globalNo); actions.prepend(play);
+      if(!actions.querySelector('.playAyahBtn')){
+  const play=document.createElement('button');
+  play.className='btn primary playAyahBtn';
+  play.textContent='▶ تلاوت';
+  play.onclick=()=>playAyah(el,globalNo);
+  actions.prepend(play);
+}
       const tr=el.querySelector('.translation'); if(tr && !el.querySelector('.readBtn')){const b=document.createElement('button');b.className='btn readBtn';b.textContent='✓ یہاں تک پڑھا';b.onclick=()=>{localStorage.setItem('lastRead',JSON.stringify({s:n,a:a.ayah}));alert('آخری مقام محفوظ ہوگیا۔')};actions.appendChild(b)}
     });
   }
