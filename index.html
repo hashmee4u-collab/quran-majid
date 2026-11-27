@@ -181,7 +181,7 @@ main {
   if(q) q.addEventListener('input',e=>searchAll(e.target.value));
   document.getElementById('lastBtn').onclick=function(){const x=JSON.parse(localStorage.getItem('lastRead')||'null');if(x)openMark(x.s,x.a);else alert('ابھی آخری پڑھی ہوئی آیت محفوظ نہیں ہے۔')};
   document.getElementById('marksBtn').onclick=renderMarks;
-  document.getElementById('allBtn').onclick=function(){q.value='';originalRender(quran.surahs);reader.classList.add('hidden');surahRoot.classList.remove('hidden')};
+  document.getElementById('allBtn').onclick=function(){if(q)q.value='';originalRender(quran.surahs);reader.classList.add('hidden');surahRoot.classList.remove('hidden')};
   document.getElementById('openAllSurahs')?.addEventListener('click',()=>document.getElementById('allBtn')?.click());
   document.getElementById('openBookmarks')?.addEventListener('click',()=>document.getElementById('marksBtn')?.click());
   document.getElementById('openLastRead')?.addEventListener('click',()=>document.getElementById('lastBtn')?.click());
