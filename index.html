@@ -193,6 +193,53 @@ main {
     box.dataset.tools=String(n);
     const s=quran.surahs.find(x=>x.number===n); let cumulative=0;
     for(const z of quran.surahs){if(z.number===n)break;cumulative+=z.ayahs.length}
+    if(!box.querySelector('#surahAudioTools')){
+      const tools=document.createElement('div');
+      tools.id='surahAudioTools';
+      tools.className='card';
+      tools.style.cssText='margin:12px 0;padding:14px;text-align:center';
+      tools.innerHTML='<div class="name" style="font-size:17px">🎧 اس سورت کی آڈیو آف لائن محفوظ کریں</div><div class="meta" id="surahAudioStatus">منتخب سورت کی آیات کی تلاوت ڈاؤن لوڈ کرکے انٹرنیٹ کے بغیر سن سکیں گے۔</div><div class="actions" style="justify-content:center"><button type="button" class="btn primary" id="downloadSurahAudio">⬇ آڈیو محفوظ کریں</button><button type="button" class="btn" id="deleteSurahAudio">محفوظ آڈیو حذف کریں</button></div>';
+      box.prepend(tools);
+      const status=tools.querySelector('#surahAudioStatus');
+      const cacheName='iqra92-quran-audio-v1';
+      const audioNumbers=s.ayahs.map(a=>cumulative+(n===1?a.ayah+1:a.ayah));
+      async function updateAudioStatus(){
+        try{
+          if(!('caches' in window)){status.textContent='اس براؤزر میں آف لائن محفوظ کرنے کی سہولت دستیاب نہیں۔';return;}
+          const cache=await caches.open(cacheName);let count=0;
+          for(const number of audioNumbers){if(await cache.match('https://cdn.islamic.network/quran/audio/128/ar.alafasy/'+number+'.mp3'))count++;}
+          status.textContent=count===audioNumbers.length?'✓ اس سورت کی تمام آڈیو آف لائن محفوظ ہے۔':count+' / '+audioNumbers.length+' آیات کی آڈیو محفوظ ہے۔ باقی محفوظ کرنے کے لیے بٹن دبائیں۔';
+        }catch(e){status.textContent='محفوظ آڈیو کی حالت معلوم نہیں ہو سکی۔';}
+      }
+      tools.querySelector('#downloadSurahAudio').addEventListener('click',async()=>{
+        const button=tools.querySelector('#downloadSurahAudio');
+        if(!('caches' in window)){status.textContent='آف لائن محفوظ کرنے کے لیے Chrome یا انسٹال شدہ ایپ استعمال کریں۔';return;}
+        button.disabled=true;button.textContent='محفوظ ہو رہا ہے…';
+        try{
+          const cache=await caches.open(cacheName);let done=0;
+          for(let i=0;i<audioNumbers.length;i++){
+            const url='https://cdn.islamic.network/quran/audio/128/ar.alafasy/'+audioNumbers[i]+'.mp3';
+            if(!await cache.match(url)){
+              const response=await fetch(url);
+              if(!response.ok)throw new Error('آڈیو سرور سے جواب نہیں ملا (آیت '+(i+1)+')');
+              await cache.put(url,response.clone());
+            }
+            done++;status.textContent='آڈیو محفوظ ہو رہی ہے: '+done+' / '+audioNumbers.length+' آیات';
+          }
+          status.textContent='✓ مکمل! اس سورت کی آڈیو اب انٹرنیٹ کے بغیر بھی چلے گی۔';
+        }catch(e){status.textContent='ڈاؤن لوڈ مکمل نہیں ہوا: '+(e.message||'اسٹوریج یا انٹرنیٹ کا مسئلہ')+'۔ دوبارہ کوشش کریں۔';}
+        finally{button.disabled=false;button.textContent='⬇ آڈیو محفوظ کریں';await updateAudioStatus();}
+      });
+      tools.querySelector('#deleteSurahAudio').addEventListener('click',async()=>{
+        try{
+          const cache=await caches.open(cacheName);
+          for(const number of audioNumbers)await cache.delete('https://cdn.islamic.network/quran/audio/128/ar.alafasy/'+number+'.mp3');
+          status.textContent='اس سورت کی محفوظ آڈیو حذف کر دی گئی ہے۔';
+        }catch(e){status.textContent='محفوظ آڈیو حذف نہیں ہو سکی۔'}
+        await updateAudioStatus();
+      });
+      updateAudioStatus();
+    }
    box.querySelectorAll('.ayah:not([id$="-basmala"])').forEach((el,i)=>{
       const match=el.id.match(/^a-(\d+)-(\d+)$/);
 if(!match)return;
@@ -243,8 +290,17 @@ window.playAyah=function(el,num){
     }
   };
 
-  player.src='https://cdn.islamic.network/quran/audio/128/ar.alafasy/'+num+'.mp3';
-  player.play().catch(()=>alert('تلاوت چلانے کے لیے دوبارہ Play دبائیں۔'));
+  (async()=>{
+    const audioUrl='https://cdn.islamic.network/quran/audio/128/ar.alafasy/'+num+'.mp3';
+    try{
+      const cache=('caches' in window)?await caches.open('iqra92-quran-audio-v1'):null;
+      const saved=cache?await cache.match(audioUrl):null;
+      if(window.__iqraAudioObjectUrl){URL.revokeObjectURL(window.__iqraAudioObjectUrl);window.__iqraAudioObjectUrl=null;}
+      if(saved){window.__iqraAudioObjectUrl=URL.createObjectURL(await saved.blob());player.src=window.__iqraAudioObjectUrl;}
+      else player.src=audioUrl;
+      await player.play();
+    }catch(e){alert('تلاوت چلانے کے لیے دوبارہ Play دبائیں۔');}
+  })();
 };
 
 })();
@@ -373,5 +429,10 @@ window.playAyah=function(el,num){
 
 
 
+<script>
+if('serviceWorker' in navigator && location.protocol==='https:'){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(()=>{}));
+}
+</script>
 </body></html>
 
