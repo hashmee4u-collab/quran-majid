@@ -1,4 +1,4 @@
-const CACHE_VERSION='iqra92-shell-v1';
+const CACHE_VERSION='iqra92-shell-v2';
 const AUDIO_CACHE='iqra92-quran-audio-v1';
 const CORE=['./','./index.html','./manifest.json','./digital-khatt-indopak.otf'];
 self.addEventListener('install',event=>{
